@@ -12,7 +12,9 @@ const HUES = [
   ['Indigos', 244], ['Violets', 268], ['Purples', 288], ['Magentas', 316], ['Pinks', 338], ['Roses', 350],
 ]
 const DEPTH = [['Whisper', 0.92], ['Mist', 0.85], ['Soft', 0.76], ['Light', 0.67], ['Classic', 0.58], ['Bold', 0.49], ['Deep', 0.39], ['Shadow', 0.29]]
-const INTENSITY = [['Ash', 0.14], ['Dusty', 0.26], ['Muted', 0.4], ['Soft', 0.55], ['Clear', 0.7], ['Vivid', 0.85], ['Electric', 1]]
+// Saturation now tops out at 0.80 instead of a full 1.0 — paint on a real wall
+// never reads as neon, so even "Electric" should still look like paint, not a marker pen.
+const INTENSITY = [['Ash', 0.10], ['Dusty', 0.20], ['Muted', 0.32], ['Soft', 0.44], ['Clear', 0.56], ['Vivid', 0.68], ['Electric', 0.80]]
 
 // Within a family, show the true, paint-shop version of the colour first
 // (mid lightness, high saturation) and fan out to pale tints / deep shades /
