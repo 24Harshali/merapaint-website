@@ -14,13 +14,28 @@ const HUES = [
 const DEPTH = [['Whisper', 0.92], ['Mist', 0.85], ['Soft', 0.76], ['Light', 0.67], ['Classic', 0.58], ['Bold', 0.49], ['Deep', 0.39], ['Shadow', 0.29]]
 const INTENSITY = [['Ash', 0.14], ['Dusty', 0.26], ['Muted', 0.4], ['Soft', 0.55], ['Clear', 0.7], ['Vivid', 0.85], ['Electric', 1]]
 
+// Within a family, show the true, paint-shop version of the colour first
+// (mid lightness, high saturation) and fan out to pale tints / deep shades /
+// muted tones after it — instead of dumping every near-white "Whisper" shade
+// first just because the loop happened to start there.
+const DEPTH_IDEAL = 4   // 'Classic'
+const INTENSITY_IDEAL = 5 // 'Vivid'
+const ORDER = []
+DEPTH.forEach((d, di) => {
+  INTENSITY.forEach((it, ii) => {
+    const score = (di - DEPTH_IDEAL) ** 2 + (ii - INTENSITY_IDEAL) ** 2
+    ORDER.push({ di, ii, score })
+  })
+})
+ORDER.sort((a, b) => a.score - b.score)
+
 const generated = []
 let n = 1001
 HUES.forEach(([fam, h]) => {
-  DEPTH.forEach(([dn, l]) => {
-    INTENSITY.forEach(([iname, s]) => {
-      generated.push({ name: `${iname} ${fam.replace(/s$/, '')} ${dn}`, code: `CP ${n++}`, color: hex(h, s, l), family: fam })
-    })
+  ORDER.forEach(({ di, ii }) => {
+    const [dn, l] = DEPTH[di]
+    const [iname, s] = INTENSITY[ii]
+    generated.push({ name: `${iname} ${fam.replace(/s$/, '')} ${dn}`, code: `CP ${n++}`, color: hex(h, s, l), family: fam })
   })
 })
 ;[['Warm Stone', 34, 0.22], ['Sand & Cream', 42, 0.3], ['Cool Slate', 210, 0.12], ['Earth Brown', 24, 0.32]].forEach(([nm, h, s]) => {
