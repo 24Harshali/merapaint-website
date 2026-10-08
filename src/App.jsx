@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Visualiser from './Visualiser.jsx'
+import ShadeAlbum from './ShadeAlbum.jsx'
 
 function useInView(threshold = 0.2) {
   const ref = useRef(null)
@@ -37,12 +38,6 @@ const SLIDES = [
   { eyebrow: 'Weatherproof finishes', title: 'Exteriors built for monsoon and summer alike.', text: 'Crack-bridging, fade-resistant coats that still look fresh years later.' },
   { eyebrow: 'Free home visit', title: 'A colour expert comes to your door. No cost.', text: 'We bring swatches, samples and honest advice before you decide anything.' },
 ]
-
-// Full shade album — grouped into families like a real in-store shade card,
-// so there's actually enough choice to browse, not just a handful of demo swatches.
-import { SHADES } from './shades.js'
-import { ALL_SHADES, FAMILY_LIST } from './data.js'
-const SHADE_LIST = ALL_SHADES(SHADES)
 
 const PRODUCTS = [
   { icon: '🏠', bg: '#FFE3D6', title: 'Interior Emulsion', desc: 'Smooth, low-odour finish with washable durability for every room.' },
@@ -223,39 +218,6 @@ function Stats() {
             <div className="stat-label">{it.label}</div>
           </div>
         ))}
-      </div>
-    </section>
-  )
-}
-
-function Shades() {
-  const [family, setFamily] = useState(FAMILY_LIST[0])
-  const [limit, setLimit] = useState(48)
-  const list = SHADE_LIST.filter((x) => x.family === family)
-  return (
-    <section className="section" id="shades">
-      <div className="wrap">
-        <Reveal className="section-head">
-          <h2>{SHADE_LIST.length.toLocaleString('en-IN')} shades, every family</h2>
-          <p>Browse by colour family. Tap “Try on a wall” to see any shade on a room or house.</p>
-        </Reveal>
-        <div className="family-tabs" role="tablist" aria-label="Filter shades by colour family">
-          {FAMILY_LIST.map((f) => (
-            <button key={f} role="tab" aria-selected={family === f} className={`family-tab ${family === f ? 'active' : ''}`} onClick={() => { setFamily(f); setLimit(48) }}>{f}</button>
-          ))}
-        </div>
-        <div className="shade-grid">
-          {list.slice(0, limit).map((x) => (
-            <div className="shade-card" key={x.code}>
-              <div className="shade-swatch" style={{ background: x.color }} />
-              <div className="shade-info">
-                <div className="shade-name">{x.name}</div>
-                <div className="shade-code">{x.code} · {x.color.toUpperCase()}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {limit < list.length && <div style={{ textAlign: 'center', marginTop: 28 }}><button className="btn-ghost" onClick={() => setLimit(limit + 48)}>Show more ({list.length - limit} left)</button></div>}
       </div>
     </section>
   )
@@ -505,7 +467,7 @@ export default function App() {
       <Hero />
       <ColourFamilies />
       <Stats />
-      <Shades />
+      <ShadeAlbum />
       <Products />
       <Visualiser />
       <Why />
